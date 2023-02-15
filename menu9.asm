@@ -33,12 +33,12 @@ display_menu:
 	# Initialize the start positions
 	addi $s4, $0, 0 # first character (D: start at 0 to 21)
 	addi $s5, $0, 22 # second character (C: start at 22 to 40)
-	addi $s6, $0, 41 # third character (E: start at 41 to 56)
+	addi $s6, $0, 41 # third character (E: start at 41 to 55)
 	
 	# Initialize the length corelated to the characters	
 	addi $t4, $0, 22 # length for first character (D: 22)
 	addi $t5, $0, 19 # length for second character (C: 19)
-	addi $t6, $0, 15 # length for third character (E: 16)
+	addi $t6, $0, 15 # length for third character (E: 15)
 	
 	#display menu
 	li $v0, 4
@@ -65,20 +65,19 @@ display:
 	la $s0, lines # address of lines	
 	addi $t1, $0, 0 # line iterator
 	display_line:
-		beq $t1, 16, display_menu
+		beq $t1, 16, display_menu # if t1 = 16 (all lines have been display) than stop
 		sll $t3, $t1, 2 # t3 = t1 * 4
 		add $t3, $s0, $t3 # address of lines[i] 
-		lw $t3, 0($t3)
+		lw $t3, 0($t3) # value of lines[i] (address of line"i")
 		# Function: display_1()
 		# Goal: Print the first character to the console
 		#-------------------
 		# Parameters: color (s1), start position (s4) and length (t4) for 1st character 
 		display_1:
-			add $t7, $t3, $s4 # address of lines[i][s4]
+			add $t7, $t3, $s4 # address of line"i"[s4]
 		 	addi $t2, $0, 0 # iterator
 			loop1:
 				beq $t2, $t4, display_2
-				
 				
 				add $t8, $t7, $t2 #address of character
 				lb $a0, 0($t8)
@@ -95,7 +94,7 @@ display:
 				addi $t2, $t2, 1 # increase t2 by 1
 				j loop1
 			set_color1:
-				addi $a0, $s1, 0
+				addi $a0, $s1, 0 # set a0 = s1 (customized color)
 				j continue1 
 				
 		# Function: display_3()
@@ -104,7 +103,7 @@ display:
 		# Parameters: color (s2), start position (s5) and length (t5) for 1st character 
 		
 		display_2:
-			add $t7, $t3, $s5 # address of lines[i][s5]
+			add $t7, $t3, $s5 # address of lines"i"[s5]
 		 	addi $t2, $0, 0 # iterator
 			loop2:
 				beq $t2, $t5, display_3
@@ -123,7 +122,7 @@ display:
 				addi $t2, $t2, 1 # increase t2 by 1
 				j loop2
 			set_color2:
-				addi $a0, $s2, 0
+				addi $a0, $s2, 0 # set a0 = s2 (customized color
 				j continue2
 		# Function: display_3()
 		# Goal: Print the third character to the console
@@ -131,7 +130,7 @@ display:
 		# Parameters: color (s3), start position (s6) and length (t6) for 1st character 
 		
 		display_3:
-			add $t7, $t3, $s6 # address of lines[i][s6]
+			add $t7, $t3, $s6 # address of line"i"[s6]
 		 	addi $t2, $0, 0 # iterator
 			loop3:
 				beq $t2, $t6, end_display_line
@@ -151,7 +150,7 @@ display:
 				addi $t2, $t2, 1 # increase t2 by 1
 				j loop3
 			set_color3:
-				addi $a0, $s3, 0
+				addi $a0, $s3, 0 # set a0 = s1 (customized color
 				j continue3
 		end_display_line:
 			li $v0, 11
@@ -160,10 +159,6 @@ display:
 			addi $t1, $t1, 1 # increase line iterator
 			j display_line
 				 
-				
-			
-
-
 
 # Function: change_color()
 # Goal: Change the color and print the whole picture to the console
@@ -226,6 +221,7 @@ display_empty:
 	addi $s2, $0, ' ' # color for C
 	addi $s3, $0, ' ' # color for E
 	j display
+	
 # Function: display_ECD()
 # Goal: Change the position  and print the whole picture to the console
 #-------------------
@@ -238,12 +234,12 @@ display_ECD:
 	addi $s3, $0, '2' # color for D
 	
 	# reset the start positions
-	addi $s4, $0, 41 # first character (E: start at 41 to 56)
+	addi $s4, $0, 41 # first character (E: start at 41 to 55)
 	addi $s5, $0, 22 # second character (C: start at 22 to 40)
 	addi $s6, $0, 0 # third character (D: start at 0 to 21)
 	
 	# reset the length corelated to the characters	
-	addi $t4, $0, 15 # length for first character  (E: 16)
+	addi $t4, $0, 15 # length for first character  (E: 15)
 	addi $t5, $0, 19 # length for second character (C: 19)
 	addi $t6, $0, 22 # length for third character (D: 22)
 	
